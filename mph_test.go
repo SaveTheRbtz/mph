@@ -130,3 +130,16 @@ func loadDict(dict string) ([]string, error) {
 	}
 	return words, nil
 }
+
+// TestNextPow2 tests the nextPow2 function.
+func TestNextPow2(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		n := nextPow2(i)
+		if n < i {
+			t.Errorf("nextPow2(%d) = %d; want >= %d", i, n, i)
+		}
+		if n&(n-1) != 0 {
+			t.Errorf("nextPow2(%d) = %d; want power of 2", i, n)
+		}
+	}
+}

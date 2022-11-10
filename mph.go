@@ -2,6 +2,8 @@
 package mph
 
 import (
+	"math/bits"
+
 	"github.com/zeebo/xxh3"
 	"golang.org/x/exp/slices"
 )
@@ -72,10 +74,13 @@ func Build(keys []string) *Table {
 }
 
 func nextPow2(n int) int {
-	for i := 1; ; i *= 2 {
-		if i >= n {
-			return i
-		}
+	switch n {
+	case 0:
+		return 1
+	case 1:
+		return 2
+	default:
+		return (1 << bits.Len(uint(n-1)))
 	}
 }
 
