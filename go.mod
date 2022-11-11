@@ -1,4 +1,4 @@
-module github.com/cespare/mph
+module github.com/SaveTheRbtz/mph
 
 go 1.18
 

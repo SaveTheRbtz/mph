@@ -1,4 +1,5 @@
 Copyright (c) 2016 Caleb Spare
+Copyright (c) 2022 Alexey Ivanov
 
 MIT License
 
