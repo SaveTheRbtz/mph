@@ -4,7 +4,7 @@ package mph
 import (
 	"math/bits"
 
-	"github.com/zeebo/xxh3"
+	"github.com/fxamacker/circlehash"
 	"golang.org/x/exp/slices"
 )
 
@@ -29,7 +29,7 @@ func Build(keys []string) *Table {
 		sparseBuckets = make([][]int, len(level0))
 	)
 	for i, s := range keys {
-		n := int(xxh3.HashStringSeed(s, 0)) & level0Mask
+		n := int(circlehash.Hash64String(s, 0)) & level0Mask
 		sparseBuckets[n] = append(sparseBuckets[n], i)
 	}
 	var buckets []indexBucket
@@ -49,7 +49,7 @@ func Build(keys []string) *Table {
 	trySeed:
 		tmpOcc = tmpOcc[:0]
 		for _, i := range bucket.vals {
-			n := int(xxh3.HashStringSeed(keys[i], uint64(seed))) & level1Mask
+			n := int(circlehash.Hash64String(keys[i], uint64(seed))) & level1Mask
 			if occ[n] {
 				for _, n := range tmpOcc {
 					occ[n] = false
@@ -86,9 +86,9 @@ func nextPow2(n int) int {
 
 // Lookup searches for s in t and returns its index and whether it was found.
 func (t *Table) Lookup(s string) (n uint32, ok bool) {
-	i0 := int(xxh3.HashStringSeed(s, 0)) & t.level0Mask
+	i0 := int(circlehash.Hash64String(s, 0)) & t.level0Mask
 	seed := t.level0[i0]
-	i1 := int(xxh3.HashStringSeed(s, uint64(seed))) & t.level1Mask
+	i1 := int(circlehash.Hash64String(s, uint64(seed))) & t.level1Mask
 	n = t.level1[i1]
 	return n, s == t.keys[int(n)]
 }
