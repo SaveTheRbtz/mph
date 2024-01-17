@@ -38,8 +38,8 @@ func Build(keys []string) *Table {
 			buckets = append(buckets, indexBucket{n, vals})
 		}
 	}
-	slices.SortFunc(buckets, func(a, b indexBucket) bool {
-		return len(a.vals) > len(b.vals)
+	slices.SortFunc(buckets, func(a, b indexBucket) int {
+		return len(a.vals) - len(b.vals)
 	})
 
 	occ := make([]bool, len(level1))
